@@ -2,19 +2,411 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Why I Need a MacBook Air M2</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <script
+      src="https://kit.fontawesome.com/5c6e7e2e2a.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      :root {
+        --bg: #f7f8fa;
+        --text: #222;
+        --accent: #0077ff;
+        --card: #fff;
+        --shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      [data-theme="dark"] {
+        --bg: #181a1b;
+        --text: #f7f8fa;
+        --accent: #4ea8ff;
+        --card: #232526;
+        --shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family: "Inter", "Poppins", Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        transition: background var(--transition), color var(--transition);
+      }
+      header {
+        padding: 2.5rem 1rem 2rem 1rem;
+        text-align: center;
+        background: var(--card);
+        box-shadow: var(--shadow);
+        border-radius: 0 0 24px 24px;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .typewriter {
+        font-size: 2.2rem;
+        font-weight: 700;
+        letter-spacing: -1px;
+        margin-bottom: 1rem;
+        min-height: 2.5rem;
+        color: var(--accent);
+      }
+      .cta-btn {
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        padding: 0.9rem 2.2rem;
+        font-size: 1.1rem;
+        border-radius: 32px;
+        cursor: pointer;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+        transition: background var(--transition), transform var(--transition);
+        margin-top: 1.2rem;
+      }
+      .cta-btn:hover {
+        background: #005fcc;
+        transform: translateY(-2px) scale(1.04);
+      }
+      .dark-toggle {
+        position: absolute;
+        top: 1.2rem;
+        right: 1.2rem;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--accent);
+        cursor: pointer;
+        transition: color var(--transition);
+      }
+      section {
+        max-width: 800px;
+        margin: 2rem auto;
+        background: var(--card);
+        box-shadow: var(--shadow);
+        border-radius: 18px;
+        padding: 2rem 1.5rem;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: opacity 0.7s var(--transition),
+          transform 0.7s var(--transition);
+      }
+      section.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      h2 {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.6rem;
+        margin-bottom: 1.2rem;
+        color: var(--accent);
+        font-weight: 600;
+      }
+      ul.features {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.2rem;
+      }
+      ul.features li {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        font-size: 1.08rem;
+        background: rgba(0, 119, 255, 0.07);
+        border-radius: 12px;
+        padding: 0.7rem 1rem;
+        transition: background var(--transition);
+      }
+      ul.features li:hover {
+        background: rgba(0, 119, 255, 0.18);
+      }
+      .comparison {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 1.2rem;
+      }
+      .comparison-card {
+        background: var(--bg);
+        border-radius: 14px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        padding: 1.2rem 1rem;
+        min-width: 220px;
+        flex: 1 1 220px;
+        text-align: center;
+        transition: box-shadow var(--transition), background var(--transition);
+      }
+      .comparison-card.current {
+        border: 2px solid #e74c3c;
+      }
+      .comparison-card.mac {
+        border: 2px solid var(--accent);
+      }
+      .comparison-card h3 {
+        margin: 0.5rem 0 0.7rem 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+      .comparison-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 0.98rem;
+        color: #555;
+      }
+      .testimonial {
+        background: rgba(0, 119, 255, 0.07);
+        border-radius: 10px;
+        padding: 1rem 1.2rem;
+        margin: 1.2rem 0;
+        font-style: italic;
+        font-size: 1.05rem;
+        display: none;
+        animation: fadeIn 0.7s;
+      }
+      .testimonial.visible {
+        display: block;
+      }
+      .show-testimonial-btn {
+        background: none;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        padding: 0.5rem 1.2rem;
+        border-radius: 24px;
+        cursor: pointer;
+        font-size: 1rem;
+        margin-top: 0.7rem;
+        transition: background var(--transition), color var(--transition);
+      }
+      .show-testimonial-btn:hover {
+        background: var(--accent);
+        color: #fff;
+      }
+      @media (max-width: 600px) {
+        section {
+          padding: 1.2rem 0.7rem;
+        }
+        ul.features {
+          grid-template-columns: 1fr;
+        }
+        .comparison {
+          flex-direction: column;
+          gap: 1rem;
+        }
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
   </head>
   <body>
-    <h1>Hello World</h1>
+    <header>
+      <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+      </button>
+      <div class="typewriter" id="typewriter"></div>
+      <p
+        style="font-size: 1.15rem; max-width: 500px; margin: 0 auto 1.2rem auto"
+      >
+        Hi, I'm
+        <span style="font-weight: 600; color: var(--accent)">Milju</span>. I'm
+        passionate about programming and building apps. Here's why a MacBook Air
+        M2 would be a game-changer for me!
+      </p>
+      <button
+        class="cta-btn"
+        onclick="document.getElementById('whyMac').scrollIntoView({behavior:'smooth'})"
+      >
+        Why I need this MacBook
+      </button>
+    </header>
+
+    <main>
+      <section id="whyMac">
+        <h2><i class="fab fa-apple"></i> Why the MacBook Air M2?</h2>
+        <ul class="features">
+          <li>
+            <i class="fas fa-microchip"></i> Apple M2 Chip – blazing fast
+            performance
+          </li>
+          <li>
+            <i class="fas fa-battery-full"></i> 18-hour battery life – all-day
+            coding
+          </li>
+          <li>
+            <i class="fas fa-volume-mute"></i> Fanless & silent – zero
+            distractions
+          </li>
+          <li>
+            <i class="fas fa-feather-alt"></i> Ultra-light & portable – code
+            anywhere
+          </li>
+          <li>
+            <i class="fas fa-code"></i> 16GB RAM & 512GB SSD – perfect for
+            development
+          </li>
+          <li>
+            <i class="fas fa-shield-alt"></i> Reliable & durable – built to last
+          </li>
+        </ul>
+      </section>
+
+      <section id="boostLearning">
+        <h2>
+          <i class="fas fa-rocket"></i> How It Would Boost My Programming
+          Learning
+        </h2>
+        <p>With the MacBook Air M2, I can:</p>
+        <ul class="features">
+          <li>
+            <i class="fab fa-js"></i> Learn JavaScript & modern web development
+            smoothly
+          </li>
+          <li>
+            <i class="fab fa-react"></i> Build React Native apps for iOS &
+            Android
+          </li>
+          <li>
+            <i class="fab fa-apple"></i> Use Xcode for native iOS/macOS
+            development
+          </li>
+          <li>
+            <i class="fas fa-laptop-code"></i> Run multiple dev tools &
+            simulators without lag
+          </li>
+          <li>
+            <i class="fas fa-cloud-upload-alt"></i> Deploy projects faster with
+            SSD speed
+          </li>
+        </ul>
+        <button class="show-testimonial-btn" id="showTestimonialBtn">
+          Show a testimonial
+        </button>
+        <div class="testimonial" id="testimonial">
+          "Switching to a MacBook Air M2 made my coding journey so much
+          smoother. No more slow builds or crashes – just pure productivity!"
+          <br />
+          <span style="font-size: 0.95rem; color: var(--accent)"
+            >– A fellow developer</span
+          >
+        </div>
+      </section>
+
+      <section id="comparison">
+        <h2><i class="fas fa-exchange-alt"></i> What I Currently Use</h2>
+        <div class="comparison">
+          <div class="comparison-card current">
+            <h3><i class="fas fa-laptop"></i> Old Laptop</h3>
+            <ul>
+              <li>Intel i3 (2016)</li>
+              <li>4GB RAM, 500GB HDD</li>
+              <li>Heavy & noisy</li>
+              <li>Battery lasts ~2 hours</li>
+              <li>Struggles with coding tools</li>
+            </ul>
+          </div>
+          <div class="comparison-card mac">
+            <h3><i class="fab fa-apple"></i> MacBook Air M2</h3>
+            <ul>
+              <li>Apple M2, 16GB RAM</li>
+              <li>512GB SSD</li>
+              <li>Silent & ultra-light</li>
+              <li>18-hour battery</li>
+              <li>Perfect for development</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="future">
+        <h2><i class="fas fa-heart"></i> Investment in My Future</h2>
+        <p>
+          This isn't just about a laptop. It's about unlocking my potential,
+          learning faster, and building the apps and solutions of tomorrow. With
+          your support, I can take my programming journey to the next level and
+          turn my dreams into reality.
+        </p>
+        <p style="font-weight: 600; color: var(--accent); font-size: 1.1rem">
+          Thank you for believing in me!
+        </p>
+      </section>
+    </main>
+
+    <script>
+      // Typewriter effect
+      const typewriterText = "Why You Should Buy Me a MacBook Air M2";
+      const typewriterElem = document.getElementById("typewriter");
+      let twIdx = 0;
+      function typeWriter() {
+        if (twIdx <= typewriterText.length) {
+          typewriterElem.textContent = typewriterText.slice(0, twIdx);
+          twIdx++;
+          setTimeout(typeWriter, 60);
+        }
+      }
+      typeWriter();
+
+      // Fade-in sections on scroll
+      function revealSections() {
+        document.querySelectorAll("section").forEach((sec) => {
+          const rect = sec.getBoundingClientRect();
+          if (rect.top < window.innerHeight - 80) {
+            sec.classList.add("visible");
+          }
+        });
+      }
+      window.addEventListener("scroll", revealSections);
+      window.addEventListener("DOMContentLoaded", revealSections);
+
+      // Testimonial toggle
+      document
+        .getElementById("showTestimonialBtn")
+        .addEventListener("click", function () {
+          const testimonial = document.getElementById("testimonial");
+          testimonial.classList.toggle("visible");
+          this.textContent = testimonial.classList.contains("visible")
+            ? "Hide testimonial"
+            : "Show a testimonial";
+        });
+
+      // Dark/Light mode toggle
+      const darkToggle = document.getElementById("darkToggle");
+      darkToggle.addEventListener("click", () => {
+        const theme = document.documentElement.getAttribute("data-theme");
+        if (theme === "dark") {
+          document.documentElement.setAttribute("data-theme", "light");
+          darkToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        } else {
+          document.documentElement.setAttribute("data-theme", "dark");
+          darkToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+      });
+      // Set initial theme
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.documentElement.setAttribute("data-theme", "dark");
+        darkToggle.innerHTML = '<i class="fas fa-sun"></i>';
+      } else {
+        document.documentElement.setAttribute("data-theme", "light");
+        darkToggle.innerHTML = '<i class="fas fa-moon"></i>';
+      }
+    </script>
   </body>
-  <style>
-    body {
-      background-color: yellowgreen;
-    }
-    h1 {
-      color: white;
-      text-align: center;
-    }
-  </style>
 </html>
