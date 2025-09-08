@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Orbiting Planets UI Enhanced</title>
+  <style>
+    /* Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: rgba(255 255 255 / 0.05);
+      border-radius: 20px;
+      box-shadow:
+        0 8px 32px 0 rgba(31, 38, 135, 0.37),
+        0 0 15px 5px rgba(255, 153, 0, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255 255 255 / 0.18);
+      width: 380px;
+      padding: 30px 30px 40px;
+      text-align: center;
+      color: #fff;
+      position: relative;
+    }
+
+    .card h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      text-shadow: 0 0 10px #ff9900;
+    }
+
+    .card p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      color: #ccc;
+      line-height: 1.4;
+    }
+
+    /* Container for animation */
+    .animation-container {
+      position: relative;
+      height: 280px;
+      margin-bottom: 20px;
+    }
+
+    /* Sun */
+    .sun {
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, #ffaa00, #ff5500);
+      border-radius: 50%;
+      box-shadow: 0 0 40px #ff9900, 0 0 80px #ff3300;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+
+    /* Orbits */
+    .orbit {
+      position: absolute;
+      border: 1.5px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      animation: rotateOrbit var(--duration, 20s) linear infinite;
+      top: 50%;
+      left: 50%;
+      transform-origin: center center;
+      cursor: pointer;
+      outline-offset: 3px;
+    }
+
+    .orbit:nth-child(2) {
+      width: 120px;
+      height: 120px;
+      margin-top: -60px;
+      margin-left: -60px;
+      --color: #1e90ff;
+      --duration: 8s;
+      --orbit-radius: 50px; /* 60 - 10 */
+    }
+
+    .orbit:nth-child(3) {
+      width: 180px;
+      height: 180px;
+      margin-top: -90px;
+      margin-left: -90px;
+      --color: #00ffcc;
+      --duration: 12s;
+      --orbit-radius: 80px; /* 90 - 10 */
+    }
+
+    .orbit:nth-child(4) {
+      width: 250px;
+      height: 250px;
+      margin-top: -125px;
+      margin-left: -125px;
+      --color: #ff66cc;
+      --duration: 16s;
+      --orbit-radius: 115px; /* 125 - 10 */
+    }
+
+    /* Planets */
+    .planet {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      /* Push planet to the edge of the orbit */
+      transform: translateX(var(--orbit-radius)) translateY(-50%);
+      background: var(--color);
+      box-shadow: 0 0 12px 2px var(--color);
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .planet:hover {
+      box-shadow: 0 0 25px 6px var(--color);
+      cursor: pointer;
+      transform: translateX(var(--orbit-radius)) translateY(-50%) scale(1.2);
+    }
+
+    /* Animation */
+    @keyframes rotateOrbit {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Buttons container */
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Buttons */
+    button {
+      background: linear-gradient(135deg, #ff9900, #ff5500);
+      border: none;
+      padding: 12px 24px;
+      font-weight: 600;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 136, 0, 0.6);
+      transition: background 0.3s ease, transform 0.2s ease;
+      user-select: none;
+      outline-offset: 2px;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #ffbb33, #ff7722);
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(255, 153, 0, 0.8);
+    }
+
+    button:focus-visible {
+      outline: 3px solid #ffbb33;
+      outline-offset: 4px;
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: absolute;
+      padding: 6px 10px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      white-space: nowrap;
+      z-index: 20;
+      user-select: none;
+    }
+
+    .tooltip.visible {
+      opacity: 1;
+    }
+
+    /* Speed mode text */
+    .speed-status {
+      font-size: 0.9rem;
+      color: #ffbb33;
+      font-weight: 600;
+      margin-top: 6px;
+      user-select: none;
+    }
+
+    /* Focus styles for accessibility */
+    .orbit:focus {
+      outline: 2px solid #ffbb33;
+      outline-offset: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card" role="region" aria-label="Orbiting planets animation">
+    <h1>Glowing Orbit Animation</h1>
+    <p>Click planets to pause/resume their orbit. Hover or focus to see their names.</p>
+
+    <div class="animation-container" aria-hidden="true">
+      <div class="sun" aria-label="Sun"></div>
+
+      <div class="orbit" data-planet="Mercury" tabindex="0"><div class="planet"></div></div>
+      <div class="orbit" data-planet="Venus" tabindex="0"><div class="planet"></div></div>
+      <div class="orbit" data-planet="Mars" tabindex="0"><div class="planet"></div></div>
+
+      <div class="tooltip" id="tooltip" role="tooltip"></div>
+    </div>
+
+    <div class="buttons">
+      <button id="toggle-speed" aria-pressed="false">Toggle Speed</button>
+      <button id="randomize-colors">Randomize Colors</button>
+    </div>
+    <div class="speed-status" id="speed-status">Speed: Normal</div>
+  </div>
+
+  <script>
+    const orbits = document.querySelectorAll('.orbit');
+    const toggleSpeedBtn = document.getElementById('toggle-speed');
+    const randomizeColorsBtn = document.getElementById('randomize-colors');
+    const speedStatus = document.getElementById('speed-status');
+    const tooltip = document.getElementById('tooltip');
+
+    let fast = false;
+    // Track which orbits are paused (true if paused)
+    const pausedOrbits = new Set();
+
+    // Helper to generate random bright-ish color
+    function randomColor() {
+      const letters = '89ABCDEF';
+      let color = '#';
+      for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * letters.length)];
+      }
+      return color;
+    }
+
+    // Toggle speed of all orbits except paused
+    function setSpeed(fastMode) {
+      orbits.forEach((orbit, index) => {
+        if (pausedOrbits.has(orbit)) return; // skip paused orbits
+
+        const baseDuration = [8, 12, 16][index];
+        const speed = fastMode ? baseDuration / 3 : baseDuration;
+        orbit.style.setProperty('--duration', `${speed}s`);
+      });
+
+      speedStatus.textContent = `Speed: ${fastMode ? 'Fast' : 'Normal'}`;
+      toggleSpeedBtn.setAttribute('aria-pressed', fastMode.toString());
+    }
+
+    // Pause or resume orbit animation for clicked planet's orbit
+    function togglePause(orbit) {
+      if (pausedOrbits.has(orbit)) {
+        // Resume animation
+        orbit.style.animationPlayState = 'running';
+        pausedOrbits.delete(orbit);
+        // Restore duration depending on speed mode
+        const index = Array.from(orbits).indexOf(orbit);
+        const baseDuration = [8, 12, 16][index];
+        const duration = fast ? baseDuration / 3 : baseDuration;
+        orbit.style.setProperty('--duration', `${duration}s`);
+      } else {
+        // Pause animation
+        orbit.style.animationPlayState = 'paused';
+        pausedOrbits.add(orbit);
+      }
+    }
+
+    // Show tooltip near planet
+    function showTooltip(text, orbit) {
+      tooltip.textContent = text;
+      const rect = orbit.getBoundingClientRect();
+      const tooltipRect = tooltip.getBoundingClientRect();
+
+      // Position tooltip above planet, centered horizontally
+      const top = window.scrollY + rect.top - tooltipRect.height - 8;
+      const left = window.scrollX + rect.left + rect.width / 2 - tooltipRect.width / 2;
+
+      tooltip.style.top = `${top}px`;
+      tooltip.style.left = `${left}px`;
+      tooltip.classList.add('visible');
+    }
+
+    function hideTooltip() {
+      tooltip.classList.remove('visible');
+    }
+
+    // Setup event listeners on orbits for pause/resume and tooltip
+    orbits.forEach((orbit) => {
+      orbit.addEventListener('click', () => {
+        togglePause(orbit);
+      });
+
+      // Hover tooltip
+      orbit.addEventListener('mouseenter', () => {
+        showTooltip(orbit.dataset.planet, orbit);
+      });
+      orbit.addEventListener('mouseleave', () => {
+        hideTooltip();
+      });
+
+      // Keyboard accessibility: show tooltip on focus, hide on blur
+      orbit.addEventListener('focus', () => {
+        showTooltip(orbit.dataset.planet, orbit);
+      });
+      orbit.addEventListener('blur', () => {
+        hideTooltip();
+      });
+    });
+
+    // Toggle speed button
+    toggleSpeedBtn.addEventListener('click', () => {
+      fast = !fast;
+      setSpeed(fast);
+    });
+
+    // Randomize colors button
+    randomizeColorsBtn.addEventListener('click', () => {
+      orbits.forEach((orbit) => {
+        const newColor = randomColor();
+        orbit.style.setProperty('--color', newColor);
+        const planet = orbit.querySelector('.planet');
+        planet.style.background = newColor;
+        planet.style.boxShadow = `0 0 12px 2px ${newColor}`;
+      });
+    });
+
+    // Initialize speeds and colors on page load
+    setSpeed(fast);
+  </script>
+</body>
+</html>
